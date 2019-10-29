@@ -37,7 +37,7 @@ switch (command) {
         break;
 
     case "movie-this":
-        // movie function
+        thisMovie(artist);
         break;
 
     case "do-what-it-says":
@@ -64,22 +64,42 @@ function thisConcert(artist) {
 };
 
 function thisSpotify(artist) {
-    spotify
-        .search({
-            type: 'track',
-            query: ''
-        })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
+
+    spotify.search({ type: 'track', query: artist }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+       
+      console.log(data); 
+      })
 
 
 };
 
 function thisMovie(artist) {
+    axios.get("http://www.omdbapi.com/?t=" + artist + "y=&plot=short&apikey=trilogy").then(
+  function(response) {
+    // console.log("The movie's rating is: " + response.data);
+    console.log(response)
+  })
+  .catch(function(error) {
+    if (error.response) {
+      
+      console.log("---------------Data---------------");
+      console.log(error.response.data);
+      console.log("---------------Status---------------");
+      console.log(error.response.status);
+      console.log("---------------Status---------------");
+      console.log(error.response.headers);
+    } else if (error.request) {
+      
+      console.log(error.request);
+    } else {
+     
+      console.log("Error", error.message);
+    }
+    console.log(error.config);
+  });
 
 
 };
@@ -96,10 +116,16 @@ function thisSays(artist) {
         console.log(data);
 
         var dataArr = data.split(",");
+        command = dataArr[0];
+        artist = dataArr[1]
+
+        thisSpotify()
 
 
         console.log(dataArr);
 
     })
+
+    // for loop or for each statement
 
 };
