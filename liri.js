@@ -51,7 +51,7 @@ function thisConcert(artist) {
         .get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
         .then(function (response) {
             if (response.data[0] === undefined) {
-                console.log("Sorry")
+                console.log("Sorry, this is unavailable. Please search again")
             } else {
                 console.log("Name: " + response.data[0].venue.name);
                 console.log("Location: " + response.data[0].venue.city + ", " + response.data[0].venue.country);
@@ -65,41 +65,81 @@ function thisConcert(artist) {
 
 function thisSpotify(artist) {
 
-    spotify.search({ type: 'track', query: artist }, function(err, data) {
-        if (err) {
-          return console.log('Error occurred: ' + err);
-        }
-       
-      console.log(data); 
-      })
+
+    if (!artist) {
+        artist = "Man in the Mirror";
+    }
+    spotify
+        .search({
+            type: 'track',
+            query: artist
+        })
+        .then(function (response) {
+            for (var i = 0; i < 5; i++) {
+
+                console.log("Artist: " + response.tracks.items[i].artists[0].name)
+                console.log("Song Name: " + response.tracks.items[i].name)
+                console.log("Album Name: " + response.tracks.items[i].album.name)
+                console.log("Preview Link: " + response.tracks.items[i].preview_url)
+
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 
 
 };
 
 function thisMovie(artist) {
-    axios.get("http://www.omdbapi.com/?t=" + artist + "y=&plot=short&apikey=trilogy").then(
-  function(response) {
-    // console.log("The movie's rating is: " + response.data);
-    console.log(response)
-  })
-  .catch(function(error) {
-    if (error.response) {
-      
-      console.log("---------------Data---------------");
-      console.log(error.response.data);
-      console.log("---------------Status---------------");
-      console.log(error.response.status);
-      console.log("---------------Status---------------");
-      console.log(error.response.headers);
-    } else if (error.request) {
-      
-      console.log(error.request);
-    } else {
-     
-      console.log("Error", error.message);
+    if (!artist) {
+        artist = "mr nobody";
     }
-    console.log(error.config);
-  });
+
+
+    axios.get("http://www.omdbapi.com/?t=" + artist + "y=&plot=short&apikey=trilogy").then(
+            function (response) {
+                // console.log("The movie's rating is: " + response.data);
+                var movieInfo = response.data;
+
+                // console.log(JSON.stringify(movieInfo));
+
+                // * Title of the movie.
+                // * Year the movie came out.
+                // * IMDB Rating of the movie.
+                // * Rotten Tomatoes Rating of the movie.
+                // * Country where the movie was produced.
+                // * Language of the movie.
+                // * Plot of the movie.
+                // * Actors in the movie.
+
+                console.log("Title: " + movieInfo.Title);
+                console.log("Year: " + movieInfo.Year);
+                console.log("IMDB Rating: " + movieInfo.Ratings[0].Value);
+                console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value);
+
+
+
+
+            })
+        .catch(function (error) {
+            if (error.response) {
+
+                console.log("---------------Data---------------");
+                console.log(error.response.data);
+                console.log("---------------Status---------------");
+                console.log(error.response.status);
+                console.log("---------------Status---------------");
+                console.log(error.response.headers);
+            } else if (error.request) {
+
+                console.log(error.request);
+            } else {
+
+                console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
 
 
 };
@@ -126,6 +166,5 @@ function thisSays(artist) {
 
     })
 
-    // for loop or for each statement
 
 };
