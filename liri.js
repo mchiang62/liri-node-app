@@ -144,7 +144,7 @@ function thisSays(artist) {
         command = dataArr[0];
         artist = dataArr[1];
 
-        thisSpotify()
+        thisSpotify(artist)
 
 
         console.log(dataArr);
