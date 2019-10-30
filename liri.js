@@ -7,7 +7,6 @@ var keys = require("./keys.js")
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 // creating a new spotify instance
-// review instance
 
 var axios = require('axios');
 
@@ -16,16 +15,10 @@ var fs = require("fs");
 var moment = require("moment");
 
 var input = process.argv;
-// it's an array, each word you use is stored in the command
-// array that contains each word you use in the command
+// it's an array that contains each word you use in the command
 
 var command = input[2];
 var artist = input[3];
-
-// concert-this
-// spotify-this-song
-// movie-this
-// do-what-it-says
 
 switch (command) {
     case "concert-this":
@@ -92,33 +85,25 @@ function thisSpotify(artist) {
 };
 
 function thisMovie(artist) {
-    if (!artist) {
+    if(!artist) {
         artist = "mr nobody";
     }
 
-
-    axios.get("http://www.omdbapi.com/?t=" + artist + "y=&plot=short&apikey=trilogy").then(
+    axios.get("http://www.omdbapi.com/?t=" + artist + "&y=&plot=short&apikey=trilogy").then(
             function (response) {
                 // console.log("The movie's rating is: " + response.data);
                 var movieInfo = response.data;
 
                 // console.log(JSON.stringify(movieInfo));
 
-                // * Title of the movie.
-                // * Year the movie came out.
-                // * IMDB Rating of the movie.
-                // * Rotten Tomatoes Rating of the movie.
-                // * Country where the movie was produced.
-                // * Language of the movie.
-                // * Plot of the movie.
-                // * Actors in the movie.
-
                 console.log("Title: " + movieInfo.Title);
                 console.log("Year: " + movieInfo.Year);
                 console.log("IMDB Rating: " + movieInfo.Ratings[0].Value);
                 console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value);
-
-
+                console.log("Country: " + movieInfo.Country);
+                console.log("Language: " + movieInfo.Language);
+                console.log("Plot: " + movieInfo.Plot);
+                console.log("Actors: " + movieInfo.Actors);
 
 
             })
@@ -157,7 +142,7 @@ function thisSays(artist) {
 
         var dataArr = data.split(",");
         command = dataArr[0];
-        artist = dataArr[1]
+        artist = dataArr[1];
 
         thisSpotify()
 
